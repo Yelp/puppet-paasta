@@ -13,6 +13,7 @@
 class paasta(
   $ensure = 'latest',
   $config_dir = '/etc/paasta',
+  $add_apt_repo = false,
 ) {
 
   file { $config_dir:
@@ -22,6 +23,10 @@ class paasta(
     mode    => '0644',
     recurse => true,
     purge   => true
+  }
+
+  if $add_apt_repo {
+    class { 'paasta::repo': } -> Package['paasta-tools']
   }
 
   package { 'paasta-tools':
